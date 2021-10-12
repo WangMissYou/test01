@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>AZENUI</title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-1.9.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/ui.css">
+		<script type="text/javascript" src="js/aui-toast.js"></script>
+		
+		<link href="favicon.ico" type="image/x-icon" rel="icon">
+		<link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+		<script type="text/javascript">
+			function setBack() {
+				pushHistory();
+				window.addEventListener("popstate", function(e) {
+					window.location.href = 'index.html'; //指定回退的地址
+				}, false);
+
+				function pushHistory() {
+					var state = {
+						title: "title",
+						url: "#" // 本页
+					};
+					window.history.pushState(state, "title", "#");
+				}
+			}
+
+			function submitdata() {
+				apiready = function() {
+					api.parseTapmode();
+				}
+				var toast = new auiToast({});
+				host = localStorage.getItem('host');
+				var url = host + '/outConfirm';
+				var formId = 'myForm'
+				$.ajax({
+					type: 'GET',
+					url: url,
+					data: $('#' + formId).serialize(),
+					async: true, // true（异步）, false（同步）
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(result) {
+						console.log("ajax请求成功" + result);
+
+						toast.success({
+							title: "提交成功",
+							duration: 2000
+						});
+						$(":input").val("");
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log("ajax请求失败" + textStatus);
+
+						toast.fail({
+							title: "提交失败",
+							duration: 2000
+						});
+					}
+				})
+			}
+			$(function() {
+				setBack();
+				outStore_productid = localStorage.getItem("outStore_productid");
+				if(outStore_productid == null) {
+					console.log("none") //不存在
+
+				} else { //回到选择产品
+					localStorage.removeItem('outStore_productid');
+					var outStore_obj = JSON.parse(localStorage['str_outStore_obj']);
+					localStorage.removeItem('str_outStore_obj');
+					//					console.log(JSON.stringify(product_obj));
+					for(var x in outStore_obj) {
+						key = x; //键
+						value = outStore_obj[x]; //值
+						console.log(value);
+						$('#' + key).val(outStore_obj[key].trim());
+					}
+					$('#search-input').val(outStore_obj['sproduct_id']);
+					$('#sproduct_tick_num1').val($('#sproduct_tick_num').val());
+					
+
+				}
+				////////////////////////////////
+				outStore_productid2 = localStorage.getItem("outStore_productid2");
+				if(outStore_productid2 == null) {
+					console.log("none") //不存在
+
+				} else { //回到选择产品
+					localStorage.removeItem('outStore_productid2');
+					var uncheck_obj = JSON.parse(localStorage['str_uncheck_obj']);
+					localStorage.removeItem('str_uncheck_obj');
+					//					console.log(JSON.stringify(uncheck_obj));
+					for(var x in uncheck_obj) {
+						key = x; //键
+						value = uncheck_obj[x]; //值
+						console.log(value);
+						$('#' + key).val(uncheck_obj[key].trim());
+					}
+					$('#search-input').val(uncheck_obj['sproduct_id']);
+					$('#search-input').val(outStore_productid2);
+					$('#sproduct_tick_num1').val($('#sproduct_tick_num').val());
+
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+
+		<div class="aui-container">
+			<div class="aui-page">
+				<div class="aui-t-header">
+					<div class="header">
+						<div class="header-background"></div>
+						<div class="toolbar statusbar-padding">
+							<button class="bar-button back-button" onclick="history.go(-1);"><i class="icon icon-back"></i></button>
+							<div class="header-title">
+								<div class="title">出库复核</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="aui-s-title b-line" style="background-color: #000000;">
+					<div class="aui-s-content" style="padding: 0px;">
+
+					</div>
+				</div>
+				<div class="aui-form-content">
+					<div class="aui-pu-list">
+						<div class="aui-form-cells">
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>选择品种:</label>
+								</div>
+								<a>
+
+									<!--<select class="mui-h5" style="margin:auto; color:#000; width: 200px; font-size: 12px;" id="product_type">
+										<option value="volvo" style="display: none;">请选择产品品种</option>
+										<option value="津">津</option>
+										<option value="冀">冀</option>
+
+									</select>-->
+									<!--<div id="" style="float:right;width: 200px; padding-right: 1px;white-space: nowrap;">
+										<a href="Table_outStore.html">点此选择品种</a>
+									</div>-->
+									<div class="aui-s-h">
+										<div class="aui-searchbar" id="search" style="width: 127%;">
+											<div class="aui-searchbar-input aui-border-radius" tapmode="">
+												<!--<i class="aui-iconfont aui-icon-search"></i>-->
+
+												<form action="javascript:void(0)">
+													<input type="search" placeholder="请输入搜索内容" id="search-input">
+												</form>
+											</div>
+											<div class="aui-searchbar-cancel" tapmod="">确定</div>
+										</div>
+										<script type="text/javascript">
+											//搜索开始
+											apiready = function() {
+												api.parseTapmode();
+											}
+											var searchBar = document.querySelector(".aui-searchbar-input");
+											if(searchBar) {
+												searchBar.onclick = function() {
+													document.querySelector(".aui-searchbar-cancel").style.marginRight = 0;
+												}
+											}
+											document.querySelector(".aui-searchbar-cancel").onclick = function() {
+												//显示供方编码
+												if($('#search-input').val() !== '') {
+													doSearch();
+												}
+												this.style.marginRight = "-" + this.offsetWidth + "px";
+												document.getElementById("search-input").value = '';
+												document.getElementById("search-input").blur();
+												//													console.log('asd');
+
+											}
+
+											function doSearch() {
+												console.log($('#search-input').val())
+												window.location.href = "Table_outStore.html?search_product_text=" + $('#search-input').val();
+											}
+
+											//搜索结束
+										</script>
+
+									</div>
+
+								</a>
+
+							</div>
+
+							<!--<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>产品编号:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_id">
+								</div>
+
+							</div>-->
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>产品名称:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_name">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>规格:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_guige">
+								</div>
+								<div class="aui-form-cell-td">
+									<label>单位:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_unit">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>生产厂家:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_factory">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>数量:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="number" pattern="" readonly id="sproduct_num">
+								</div>
+
+								<div class="aui-form-cell-td">
+									<label>件数:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="number" pattern="" readonly id="sproduct_packagenum">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>批号:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_bach">
+								</div>
+
+								<div class="aui-form-cell-td">
+									<label>小号:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="number" pattern="" readonly id="sproduct_bach_small">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>有效期至:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="datetime" pattern="" value="" id="sproduct_ending">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>生产日期:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="datetime" pattern="" value="" id="sproduct_start">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>客户全称:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="clientName">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>经手人:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="handPerson">
+								</div>
+
+							</div>
+
+							<div class="aui-form-cell b-line">
+								<div class="aui-form-cell-td">
+									<label>出库单号:</label>
+								</div>
+								<div class="aui-form-cell-tb">
+									<input type="text" pattern="" readonly id="sproduct_tick_num">
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					<div class="aui-btn-list" style="padding-top: 5px; padding-bottom: 5px;">
+						<!--<a href="Table_uncheckInfo.html" class="btn aui-aui-btn" style="width: 280px;">
+							未复核信息
+						</a>-->
+
+						<button class="btn aui-aui-btn" style="width: 280px;" onclick="window.open('Table_uncheckInfo.html')">
+							未复核信息
+						</button>
+
+					</div>
+
+					<form id="myForm">
+
+						<input type="hidden" name="Bill_Num" id="sproduct_tick_num1" value="" />
+						<input type="hidden" name="GoodsID" id="sproduct_xvhao" value="" />
+						<input type="hidden" name="Bill_ID" id="out_small" value="" />
+						<input type="hidden" name="User_ID" id="user_id" value="" />
+						<input type="hidden" name="User_Name" id="user_name" value="" />
+						<button class="btn aui-aui-btn" type="button" onclick="submitdata()" style="width: 280px;">确认</button>
+					</form>
+
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+
+</html>

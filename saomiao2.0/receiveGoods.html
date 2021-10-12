@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>首页</title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/ui.css">
+
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+				padding-bottom: 51px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">收货界面</h1>
+		</header>
+
+		<div class="mui-content">
+			<div class="aui-t-content">
+				<div class="aui-tab t-line">
+					<ul class="aui-b-border">
+						<li class="aui-hit r-line">分类一</li>
+						<li class="r-line">分类二</li>
+						<li class="r-line">分类三</li>
+					</ul>
+					<div class="aui-panes">
+						<div class="aui-pane" style="display:block">
+							<div class="aui-menu-list">
+								<ol>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+								</ol>
+							</div>
+						</div>
+						<div class="aui-pane">
+							<div class="aui-menu-list">
+								<ol>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+									<li class="b-line">提供现有的UI组件方便用户快速整合,降低使用成本</li>
+								</ol>
+							</div>
+						</div>
+						<div class="aui-pane">
+							<div class="aui-menu-list">
+								<ol>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+									<li class="b-line">基于框架开发</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			$('.aui-tab ul li').click(function() {
+				$(this).addClass('aui-hit').siblings().removeClass('aui-hit');
+				$('.aui-panes>div:eq(' + $(this).index() + ')').show().siblings().hide();
+			})
+		})
+	</script>
+
+</html>

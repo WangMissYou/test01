@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="css/ui.css">
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				pullRefresh: {
+					container: "#main", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+					down: {
+						style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+						color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+						height: '100px', //可选,默认50px.下拉刷新控件的高度,
+						range: '200px', //可选 默认100px,控件可下拉拖拽的范围
+						offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
+						auto: true, //可选,默认false.首次加载自动上拉刷新一次
+						callback: console.log("1") //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					}
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+		<div id="main">
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="#"><img src="image/shouhuo.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">收货</h2>
+
+				</div>
+			</div>
+
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="#"><img src="image/yanshou.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">验收</h2>
+
+				</div>
+			</div>
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="#"><img src="image/shangjia.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">上架</h2>
+
+				</div>
+			</div>
+
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="#"><img src="image/fuhe.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">出库复核</h2>
+
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

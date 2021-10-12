@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		
+
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<script src="js/jquery.i18n.properties-min-1.0.9.js"></script>
+		<title></title>
+		<script type="text/javascript">
+			function loadProperties() {
+				jQuery.i18n.properties({
+					name: 'propertiesInfo',
+					path: 'static/',
+					mode: 'map',
+					callback: function() {
+						//						alert($.i18n.prop('host'));
+					}
+				});
+			}
+
+			function getHostInfo() {
+				loadProperties();
+				localStorage.setItem('host', $.i18n.prop('host'));
+			}
+			$(function() { //此句代表整个html加载完了才执行，这里body都没东西，自然不需要
+
+				getHostInfo();
+				console.log(localStorage.getItem('host'));
+
+			});
+		</script>
+	</head>
+
+	<body>
+		<!--<script type="text/javascript">
+			var w = document.documentElement.clientWidth || document.body.clientWidth;
+			var h = document.documentElement.clientHeight || document.body.clientHeight;
+			console.log(w);
+			console.log(h);
+		</script>-->
+		<div class="container">
+
+			<div style="height: 100px; position: relative; margin-bottom: 20px; margin-top: 20px;">
+
+				<div style="position: absolute; top: 50%;  left: 50%;  transform: translate(-50%,-50%);  font-size: 60px;">手持收货验收平台</div>
+
+			</div>
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="take_delivery.html"><img src="image/shouhuo.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">收货</h2>
+
+				</div>
+			</div>
+
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="examine_goods.html"><img src="image/yanshou.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">验收</h2>
+
+				</div>
+			</div>
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="pullGoods.html"><img src="image/shangjia.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">上架</h2>
+
+				</div>
+			</div>
+
+			<div class="col-sm">
+				<div class="dedicated">
+					<div class="icon">
+						<a href="outStore.html"><img src="image/fuhe.png" style="width: 150px;"></a>
+					</div>
+					<h2 class="hosting_text">出库复核</h2>
+
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>

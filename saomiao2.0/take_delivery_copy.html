@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>AZENUI</title>
+		<link rel="stylesheet" type="text/css" href="css/ui.css">
+		<link href="favicon.ico" type="image/x-icon" rel="icon">
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" src="js/aui-toast.js"></script>
+		<link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+
+		<script type="text/javascript">
+			function submitdata() {
+				apiready = function() {
+					api.parseTapmode();
+				}
+				var toast = new auiToast({});
+
+				var inputs_obj = document.getElementsByTagName("input");
+				for(i = 0; i < inputs_obj.length; i++) {
+					if(inputs_obj[i].type !== "hidden" && inputs_obj[i].value == "") {
+
+						inputs_obj[i].focus();
+						toast.fail({
+							title: "你必须输入" + inputs_obj[i].parentNode.previousElementSibling.childNodes[1].textContent.replace(':', '').replace('：', '') || '完整信息',
+							duration: 2000
+						});
+						return;
+					}
+				}
+				var url = 'http://cwc.vaiwan.com/check_gd';
+				var formId = 'myForm'
+				$.ajax({
+					type: 'GET',
+					url: url,
+					data: $('#' + formId).serialize(),
+					async: true, // true（异步）, false（同步）
+					cache: false,
+					contentType: false,
+					processData: false,
+					success: function(result) {
+						console.log("ajax请求成功" + result);
+
+						toast.success({
+							title: "提交成功",
+							duration: 2000
+						});
+					},
+					error: function(XMLHttpRequest, textStatus, errorThrown) {
+						console.log("ajax请求失败" + textStatus);
+
+						toast.fail({
+							title: "提交失败",
+							duration: 2000
+						});
+					}
+				})
+			}
+
+			function setBack() {
+				pushHistory();
+				window.addEventListener("popstate", function(e) {
+					window.location.href = 'index.html'; //指定回退的地址
+				}, false);
+
+				function pushHistory() {
+					var state = {
+						title: "title",
+						url: "#" // 本页
+					};
+					window.history.pushState(state, "title", "#");
+				}
+			}
+
+			function show_storage() {
+				mui.ajax('http://cwc.vaiwan.com/getStorage', {
+					data: {
+						user_num: '',
+						user_name: ''
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'get', //HTTP请求类型
+					timeout: 10000, //超时时间设置为10秒；
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					success: function(data) {
+						//服务器返回响应，根据响应结果，分析是否登录成功；
+						addSeletion(data);
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						console.log(type);
+					}
+				});
+			}
+
+			function addSeletion(my_data) {
+				// jsadditemtoselect($('#num_sel'),"添加","a")
+				for(j = 0, len = my_data.length; j < len; j++) {
+					value = my_data[j]['sto_name'];
+					var obj = $('#product_storage')
+					if(!isExistOption('product_storage', value)) {
+						obj.append(new Option(value, my_data[j]['sto_id']));
+					}
+				}
+
+			}
+
+			function isExistOption(id, value) {
+				//判断值为value的option是否存在
+				var isExist = false;
+				var count = $('#' + id).find('option').length;
+
+				for(var i = 0; i < count; i++) {
+					if($('#' + id).get(0).options[i].value == value) {
+						isExist = true;
+						break;
+					}
+				}
+				//				console.log(isExist)
+				return isExist;
+			}
+			$(function() { //此句代表整个html加载完了才执行，这里body都没东西，自然不需要
+				//				$('.aui-tab ul li').click(function() {
+				//					
+				//					$(this).addClass('aui-hit').siblings().removeClass('aui-hit');
+				//					$('.aui-panes>div:eq(' + $(this).index() + ')').show().siblings().hide();
+				//				})
+				setBack()
+				temp_commen_supplier_number = localStorage.getItem("commen_supplier_number");
+				localStorage.removeItem('commen_supplier_number');
+				if(temp_commen_supplier_number == null) {
+					console.log("none") //不存在
+					//					document.getElementById('shxx').
+					//					$('#shxx').style.onClick = true;
+					$('.aui-tab ul li').click(function() {
+
+					})
+				} else { //回到选择供方
+					localStorage.removeItem('commen_supplier_number');
+					$('#supplier_number').val(temp_commen_supplier_number);
+					$('#supplier_name').val(localStorage['commen_supplier_name']);
+					$('#supplier_linkman').val(localStorage['commen_supplier_linkman']);
+					$('#supplier_tel').val(localStorage['commen_supplier_tel']);
+					localStorage.setItem('search_pinzhong_supply_number', temp_commen_supplier_number);
+
+					$('.aui-tab ul li').click(function() {
+
+						$(this).addClass('aui-hit').siblings().removeClass('aui-hit');
+						$('.aui-panes>div:eq(' + $(this).index() + ')').show().siblings().hide();
+					})
+					$("#shxx").click();
+				}
+
+				temp_commen_product_number = localStorage.getItem("commen_product_number");
+				if(temp_commen_product_number == null) {
+					console.log("none") //不存在
+
+				} else { //回到选择产品
+					localStorage.removeItem('commen_product_number');
+					var product_obj = JSON.parse(localStorage['str_product_obj']);
+					//					console.log(JSON.stringify(product_obj));
+					for(var x in product_obj) {
+						key = x; //键
+						value = product_obj[x]; //值
+						$('#' + key).val(product_obj[key]);
+					}
+					$('#product_received').val(product_obj['product_not']); //收货数量=未收数量
+
+				}
+
+				show_storage();
+
+			});
+		</script>
+	</head>
+
+	<body>
+
+		<div class="aui-container">
+			<div class="aui-page">
+				<div class="aui-t-header">
+					<div class="header">
+						<div class="header-background"></div>
+						<div class="toolbar statusbar-padding">
+							<button class="bar-button back-button" onclick="history.go(-1);"><i class="icon icon-back"></i></button>
+							<div class="header-title">
+								<div class="title">收货</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="aui-s-title">
+
+				</div>
+
+				<!-- 导航切换 begin -->
+				<div class="aui-t-content">
+					<div class="aui-tab t-line">
+						<ul class="aui-b-border">
+							<li class="aui-hit r-line" style="width: 50%;" id="shgf">收货供方</li>
+							<li class="r-line" style="width: 50%;" id="shxx">收货信息</li>
+						</ul>
+						<!--////////////////-->
+						<form action="http://cwc.vaiwan.com/check_gd" method="get" id="myForm">
+							<div class="aui-panes">
+								<div class="aui-pane" style="display:block">
+									<div class="aui-form-cell b-line">
+										<div class="aui-form-cell-td">
+											<label>选择供方:</label>
+										</div>
+										<!--<select style="margin-left: 20px;">
+										<option value="volvo">Volvo</option>
+										<option value="saab">Saab</option>
+										<option value="opel">Opel</option>
+										<option value="audi">Audi</option>
+									</select>-->
+
+										<div id="" style="float:right;width: 200px; padding-right: 1px;white-space: nowrap;">
+											<a href="Table_supply.html">点此选择供方</a>
+										</div>
+									</div>
+									<div class="aui-form-cell b-line">
+										<div class="aui-form-cell-td">
+											<label>供方全称:</label>
+										</div>
+										<div class="aui-form-cell-tb">
+											<input type="text" readonly="true" id="supplier_name" />
+										</div>
+									</div>
+									<div class="aui-form-cell b-line">
+										<div class="aui-form-cell-td">
+											<label>联系人:</label>
+										</div>
+										<div class="aui-form-cell-tb">
+											<input type="text" readonly="true" id="supplier_linkman" />
+										</div>
+									</div>
+									<div class="aui-form-cell b-line">
+										<div class="aui-form-cell-td">
+											<label>电话:</label>
+										</div>
+										<div class="aui-form-cell-tb">
+											<input type="tel" readonly="true" id="supplier_tel" />
+										</div>
+									</div>
+
+									<div class="aui-form-cell b-line">
+										<div class="aui-form-cell-td">
+											<label>供方编号:</label>
+										</div>
+										<div class="aui-form-cell-tb">
+											<input type="text" readonly="true" id="supplier_number" />
+										</div>
+									</div>
+								</div>
+
+								<input type="hidden" id="product_xvhao" name="GoodsID"></input>
+
+								<input type="hidden" id="product_xvhao" name="User_ID"></input>
+
+								<input type="hidden" id="product_xvhao" name="User_Name"></input>
+								<div class="aui-pane">
+									<div class="aui-menu-list">
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>选择品种:</label>
+											</div>
+
+											<div id="" style="float:right;width: 200px; padding-right: 1px;white-space: nowrap;">
+												<a href="Table_pinzhong.html">点此选择品种</a>
+											</div>
+
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>产品名称:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" readonly="true" name="product_name" id="product_name" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>规格:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" readonly="true" name="product_guige" id="product_guige" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>单位:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" readonly="true" name="product_unit" id="product_unit" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>生产厂家:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" readonly="true" name="product_factory" id="product_factory" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>订货数量:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="product_num" id="product_num" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>订货单价:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="Price" id="product_price" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>未收数量:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="product_not" id="product_not" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>已收数量:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="product_yes" id="product_yes" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>收货数量:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="Num" id="product_received" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>包装量:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" readonly="true" name="Pack" id="product_packageNum" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>库房:</label>
+											</div>
+											<select style="margin-left: 20px;" id="product_storage" name="Storage">
+
+											</select>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>批号:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" id="product_bach" name="Batch" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>小号:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" id="product_small_num" name="Batch2" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>有效期至:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="date" id="product_ending" name="validity" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>生产日期:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="date" id="product_start" name="production" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>运输温度:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" id="product_transport_temperature" name="Traffic" />
+											</div>
+
+											<div class="aui-form-cell-td">
+												<label>到货温度:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="number" id="product_receiving_temperature" name="Arrival" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>拒收原因:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<input type="text" id="reason_for_rejection" name="Rejection" />
+											</div>
+										</div>
+										<div class="aui-form-cell b-line">
+											<div class="aui-form-cell-td">
+												<label>订货票号:</label>
+											</div>
+											<div class="aui-form-cell-tb">
+												<form action="http://cwc.vaiwan.com/check_gd" method="get">
+													<input type="text" readonly="true" id="product_tick" name="Bill_Num" />
+											</div>
+										</div>
+
+									</div>
+									<div class="style1">
+										<label>外包装质量:</label>
+
+										<input type="radio" name="Quality" value="1" checked>合格&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="Quality" value="0">不合格
+									</div>
+									<div class="style1">
+										<label>收货类型:</label>
+
+										<input type="radio" name="Type" value="0" checked>收货&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<input type="radio" name="Type" value="1">拒收
+									</div>
+									<input type="button" value="确认提交" class="btn aui-aui-btn" style="margin-top: 10px;" onclick="submitdata()" />
+								</div>
+
+							</div>
+							</form>
+					</div>
+				</div>
+
+				<!-- 导航切换 end -->
+
+			</div>
+		</div>
+		<script src="js/jquery-1.9.1.min.js" tppabs="http://azenui.com/js/jquery-1.7.1.min.js"></script>
+
+	</body>
+
+</html>

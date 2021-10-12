@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>Table</title>
+		<meta charset="UTF-8">
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery-1.9.1.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="js/urlLib.js"></script>
+		<script src="js/jquery.i18n.properties-min-1.0.9.js"></script>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+				box-sizing: border-box;
+			}
+			
+			body,
+			html {
+				height: 100%;
+				font-family: sans-serif;
+			}
+			/* ------------------------------------ */
+			
+			a {
+				margin: 0px;
+				transition: all 0.4s;
+				-webkit-transition: all 0.4s;
+				-o-transition: all 0.4s;
+				-moz-transition: all 0.4s;
+			}
+			
+			a:focus {
+				outline: none !important;
+			}
+			
+			a:hover {
+				text-decoration: none;
+			}
+			/* ------------------------------------ */
+			
+			h1,
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: 0px;
+			}
+			
+			p {
+				margin: 0px;
+			}
+			
+			ul,
+			li {
+				margin: 0px;
+				list-style-type: none;
+			}
+			/* ------------------------------------ */
+			
+			input {
+				display: block;
+				outline: none;
+				border: none !important;
+			}
+			
+			textarea {
+				display: block;
+				outline: none;
+			}
+			
+			textarea:focus,
+			input:focus {
+				border-color: transparent !important;
+			}
+			/* ------------------------------------ */
+			
+			button {
+				outline: none !important;
+				border: none;
+				background: transparent;
+			}
+			
+			button:hover {
+				cursor: pointer;
+			}
+			
+			iframe {
+				border: none !important;
+			}
+			
+			.limiter {
+				width: 100%;
+				margin: 0 auto;
+			}
+			
+			.container-table100 {
+				width: 100%;
+				min-height: 100vh;
+				background: #c4d3f6;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: -ms-flexbox;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+				padding: 33px 30px;
+			}
+			
+			.wrap-table100 {
+				width: 960px;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			
+			.table {
+				width: 100%;
+				display: table;
+				margin: 0;
+			}
+			
+			@media screen and (max-width: 768px) {
+				.table {
+					display: block;
+				}
+			}
+			
+			.row {
+				display: table-row;
+				background: #fff;
+			}
+			
+			.row.header {
+				color: #ffffff;
+				background: #6c7ae0;
+			}
+			
+			@media screen and (max-width: 768px) {
+				.row {
+					display: block;
+				}
+				.row.header {
+					padding: 0;
+					height: 0px;
+				}
+				.row.header .cell {
+					display: none;
+				}
+				.row .cell:before {
+					font-family: Poppins-Bold;
+					font-size: 12px;
+					color: #808080;
+					line-height: 1.2;
+					text-transform: uppercase;
+					font-weight: unset !important;
+					margin-top: 10px;
+					margin-bottom: 5px;
+					content: attr(data-title);
+					min-width: 98px;
+					display: block;
+				}
+			}
+			
+			.cell {
+				display: table-cell;
+			}
+			
+			@media screen and (max-width: 768px) {
+				.cell {
+					display: block;
+				}
+			}
+			
+			.row .cell {
+				font-family: Poppins-Regular;
+				font-size: 15px;
+				color: #666666;
+				line-height: 1.2;
+				font-weight: unset !important;
+				padding-top: 20px;
+				padding-bottom: 20px;
+				border-bottom: 1px solid #f2f2f2;
+			}
+			
+			.row.header .cell {
+				font-family: Poppins-Regular;
+				font-size: 18px;
+				color: #fff;
+				line-height: 1.2;
+				font-weight: unset !important;
+				padding-top: 19px;
+				padding-bottom: 19px;
+			}
+			
+			.row .cell:nth-child(1) {
+				width: 360px;
+				padding-left: 40px;
+			}
+			
+			.row .cell:nth-child(2) {
+				width: 160px;
+			}
+			
+			.row .cell:nth-child(3) {
+				width: 250px;
+			}
+			
+			.row .cell:nth-child(4) {
+				width: 190px;
+			}
+			
+			.table,
+			.row {
+				width: 100% !important;
+			}
+			
+			.row:hover {
+				background-color: #ececff;
+				cursor: pointer;
+			}
+			
+			@media (max-width: 768px) {
+				/*margin用于调整两个方块之间的距离*/
+				.row {
+					border-bottom: 1px solid #f2f2f2;
+					padding-bottom: 18px;
+					padding-top: 15px;
+					padding-right: 15px;
+					margin: 0;
+					margin-bottom: 10px;
+				}
+				.row .cell {
+					border: none;
+					padding-left: 30px;
+					padding-top: 1px;
+					padding-bottom: 3px;
+				}
+				.row .cell:nth-child(1) {
+					padding-left: 30px;
+				}
+				.row .cell {
+					font-family: Poppins-Regular;
+					font-size: 18px;
+					color: #555555;
+					line-height: 1.2;
+					font-weight: unset !important;
+				}
+				.table,
+				.row,
+				.cell {
+					width: 100% !important;
+				}
+			}
+		</style>
+
+		<script type="text/javascript">
+			var arr = {
+				"sproduct_id": '产品编号', //不显示
+				"sproduct_name": '产品名称',
+				"sproduct_guige": '规格',
+				"sproduct_unit": '单位',
+				"sproduct_factory": '生产厂家',
+
+				"sproduct_xvhao": '产品序号',//不显示
+				"sproduct_num": '数量', 
+				"sproduct_packagenum": '包装量',//不显示
+				"sproduct_bach": '批号',
+
+				"sproduct_bach_small": '批号小号',//不显示
+				"sproduct_ending": '有效期至', 
+				"sproduct_start": '生产日期', 
+				"sproduct_tick_num": '票号', 
+				"sproduct_small_num": '小号', 
+				"sproduct_storage": '库房',
+				"in_small":'入库小号',//不显示
+				"rec_site":'推荐货位',
+				"jianshu":'件数'
+
+			}
+
+			function getres() {
+// 				var supply_number = localStorage.getItem('search_pinzhong_supply_number');
+// //				console.log(support_goods)
+// 				localStorage.removeItem('search_pinzhong_supply_number');
+// 				console.log(supply_number + '@@123')
+// 				localStorage.setItem("commen_supplier_number", supply_number);
+				
+				host = localStorage.getItem('host');
+				my_url = parseURL(location.href);
+				console.log("my_url="+my_url);
+				value = my_url.params.search_product_text;
+				host = localStorage.getItem('host');
+				var username=localStorage.getItem("name");
+				var usernum=localStorage.getItem("number");
+				var storge = localStorage.getItem("storge");
+				$(function() {
+					mui.ajax(host+'/selectPinzhong2', {
+						data: {
+							value: value,
+							user_num: usernum,
+							user_name: username,
+							storage:storge
+
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'get', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						success: function(data) {
+							//服务器返回响应，根据响应结果，分析是否登录成功；
+							addrow(data);
+						},
+						error: function(xhr, type, errorThrown) {
+							//异常处理；
+							console.log(type);
+						}
+					});
+
+				});
+			}
+
+			function fillStr(str) {
+				if(str == null || str.toString().trim() == '') {
+					return '无'
+				} else {
+					return str
+				}
+			} 
+
+			function addrow(my_data) {
+				
+				var main_div = $("#table_main");
+				for(var n = 0; n < my_data.length; n++) {
+					//获取div
+
+					add_div = document.createElement("div"); //块
+					add_div.setAttribute('id', my_data[n]['sproduct_id']);
+					add_div.onclick = show;
+					add_div.className = 'row';
+					for(var x in arr) {
+						key = x; //键
+						value = arr[x]; //值
+
+						d = document.createElement("div");
+						d.onclick = show;
+						d.className = 'cell'
+						d.setAttribute('data-title', value);
+						d.innerHTML = fillStr(my_data[n][key]);
+						add_div.setAttribute(key, fillStr(my_data[n][key]));
+						add_div.appendChild(d)
+					}
+					main_div.append(add_div);
+
+				}
+			}
+
+			function show() {
+				console.log($(this).attr("id"))
+				var product_obj = {}
+				// localStorage.setItem('outStore_productid', $(this).attr("id"));
+				
+				for(var x in arr) {
+					key = x; //键
+					value = arr[x]; //值
+					product_obj[key] = $(this).attr(key);
+				}
+				var str_product_obj = JSON.stringify(product_obj);
+//				console.log(str_product_obj);
+				localStorage.setItem('str_product_obj', str_product_obj);
+				localStorage.setItem("commen_product_number", $(this).attr("id"));
+
+				window.location = "pullGoods_gly.html"
+			}
+			$(function() { //此句代表整个html加载完了才执行，这里body都没东西，自然不需要
+
+				getres();
+
+			});
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择品种</h1>
+		</header>
+		<div class="limiter">
+			<div class="container-table100">
+				<div class="wrap-table100">
+					<div class="table" id="table_main">
+
+						<div class="row header" id="row_header">
+							<div class="cell" data-title="供方全称">
+								供方全称
+							</div>
+							<div class="cell" data-title="联系人">
+								联系人
+							</div>
+							<div class="cell" data-title="联系电话">
+								联系电话
+							</div>
+							<div class="cell" data-title="供方序号">
+								供方序号
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+</html>

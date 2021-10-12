@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>	
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+	<script src="js/jquery-1.9.1.min.js"></script>
+	<script src="js/jquery.i18n.properties-min-1.0.9.js"></script>	
+	<script type="text/javascript">
+	mui.init();
+	document.addEventListener("reload_data",function(e){
+		// ip = e.detail.ip;
+		// port = e.detail.port;
+		account2 = e.detail.account;
+		console.log("account==1==="+account2);
+		// console.log("ip===="+ip);
+		// console.log("port===="+port);
+		// document.getElementById("ip").value=ip;
+		// document.getElementById("port").value=port;
+		// document.getElementById("account").value=account2;
+		document.getElementById("password").value=""
+
+	});
+
+			// function loadProperties() {
+			// 	jQuery.i18n.properties({
+			// 		name: 'propertiesInfo',
+			// 		path: 'static/',
+			// 		mode: 'map',
+			// 		callback: function() {
+			// 			//						alert($.i18n.prop('host'));
+			// 		}
+			// 	});
+			// }
+
+			// function getHostInfo() {
+			// 	loadProperties();
+			// 	localStorage.setItem('host', $.i18n.prop('host'));
+			// }
+			// $(function() { //此句代表整个html加载完了才执行，这里body都没东西，自然不需要
+
+			// 	getHostInfo();
+			// 	console.log(localStorage.getItem('host'));
+
+			// });
+	</script>
+
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+			<h1 class="mui-title">欢迎登录</h1>
+		</header>
+		<div class="mui-content">
+			<div id="input_example" class="mui-input-group" style="margin-top: 30px;">
+			    <div class="mui-input-row">
+			        <label>账号：</label>
+			        <input id="account" type="text" class="mui-input-clear" placeholder="请输入用户名">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>密码：</label>
+			        <input id="password" type="password" class="mui-input-clear mui-input-password" placeholder="请输入密码">
+			    </div>
+<!-- 			    <div class="mui-input-row">
+			        <label>ip：</label>
+			        <input id="ip" type="text"  class="mui-input-clear" placeholder="请输入ip地址">
+			    </div>	
+			    <div class="mui-input-row">
+			        <label>端口号：</label>
+			        <input id="port" type="text" class="mui-input-clear" placeholder="请输入端口号">
+			    </div>	 -->	
+			 </div>
+			<div class="mui-button-row" style="margin-top:30px">
+			        <button type="button" data-loading-text="登录中" class="mui-btn mui-btn-primary" style="width:60%;height: 40px;">登录</button>
+			        <!--<button type="button" class="mui-btn mui-btn-danger" >取消</button>-->
+			</div>
+		</div>
+		<script type="text/javascript">
+			mui(document.body).on('tap', '.mui-btn', function(e) {
+			mui("#input_example input").each(function() {
+				//若当前input为空，则alert提醒 
+				if(!this.value || this.value.trim() == "") {
+				    var label = this.previousElementSibling;
+				    mui.alert(label.innerText + "不允许为空");
+				    check = false;
+				    return false;
+				}else{
+					check =true;
+				}
+			}); //校验通过，继续执行业务逻辑 
+				if(check){ 
+					mui('.mui-btn').button('loading');
+				    var myaccount=  document.getElementById("account").value;
+					var mypasswd = document.getElementById("password").value;
+					// console.log("myaccount="+myaccount);
+					// console.log("mypassword="+mypassword);
+					// var ip = document.getElementById("ip").value;
+					// var port = document.getElementById("port").value;
+					
+					// var ip = '192.168.0.95';
+					// var port = '8853';
+					var ip = '192.168.21.153';
+					var port = '8080';					
+					// localStorage.setItem("ip",ip);
+					// localStorage.setItem("port",port);
+					// var myport = document.getElementById("port").value;
+					console.log("myaccount="+myaccount);
+					console.log("mypasswd="+mypasswd);
+					//OperatorLogin  /login  /Apisaomiao
+					var host = 'http'+'://'+ip+':'+port+'/fengtian/Apisaomiao';
+					// var host = 'http://cwc.vaiwan.com';
+					var url = host + '/OperatorLogin';
+					console.log("url="+url);
+					localStorage.setItem("host",host);
+					console.log("host="+host);
+										
+					// var ip = '192.168.223.153';	
+					// var IP_PORT = ip+":"+myport;
+					// localStorage.setItem("IP_PORT",IP_PORT);
+					
+					// var url = 'http://'+ IP_PORT+'/'+'fengtian/Apisaomiao/OperatorLogin';					
+					mui.ajax(url,{
+							data:{
+								account:myaccount,
+								password:mypasswd
+							},
+							dataType:'jsonp',//服务器返回json格式数据
+							type:'get',//HTTP请求类型
+			
+							success:function(data){
+								//获得服务器响应
+								// console.log("data="+data);
+								mui('.mui-btn').button('reset');
+								var res = JSON.parse(data);
+								// console.log("data="+data);
+								// var test = JSON.stringify(data);
+								// console.log("test="+test.msg);
+								console.log("res="+res.code);
+								document.getElementById("account").value= myaccount;
+								if(res.code == 200){
+									// console.log(res.powerflag);
+										
+									 // console.log(res.powerflag);
+									 
+									localStorage.setItem("name",res.name);
+									localStorage.setItem("number",res.number);			
+									localStorage.setItem("storge",res.storge);
+									// localStorage.setItem("myaccount",myaccount);
+																		
+									localStorage.setItem("powerflag",res.powerflag);
+									localStorage.setItem("flagone",res.flagone);
+									localStorage.setItem("flagtwo",res.flagtwo);
+									localStorage.setItem("flagthree",res.flagthree);
+									localStorage.setItem("flagfour",res.flagfour);	
+									
+									// document.getElementById("account").value= myaccount;
+									// document.getElementById("password").value=""
+									// document.getElementById("ip").value="";
+									// document.getElementById("port").value=""
+									// mui.openWindow({
+									// 	url: 'B.html', 
+									// 	show:{
+									// 	autoShow:false
+									// 	}
+									// });		
+									plus.nativeUI.toast("登录成功");							
+									var indexPage1 = plus.webview.getWebviewById('index_gly.html');
+									// mui.fire(indexPage, 'reload_data', {});
+									console.log("123===666");
+									mui.fire(indexPage1,'reload_data_gl',{
+										powerflag:res.powerflag,
+										flagone:res.flagone,
+										flagtwo:res.flagtwo,
+										flagthree:res.flagthree,
+										flagfour:res.flagfour
+										// account:myaccount
+									});
+									mui.openWindow({
+										url: 'index_gly.html',
+										id: 'index_gly.html',
+									// 	styles:{  
+									// 		cachemode:'noCache'  
+									// 	} 											
+									
+									});												
+										
+
+								}else{
+									mui.toast(res.msg); 
+								}
+							}
+						});
+				}
+			});
+		</script>
+</body>
+</html>

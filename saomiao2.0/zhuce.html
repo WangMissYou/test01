@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>	
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+    <script type="text/javascript" charset="utf-8">
+
+    </script>	
+
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+			<div class="mui-icon mui-action-back mui-icon-arrowleft mui-icon-back mui-badge-primary mui-badge-inverted"> </div>		
+			<!--<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>-->
+			<h1 class="mui-title">注册账号</h1>
+		</header>
+		<div class="mui-content">
+			<div id="input_example" class="mui-input-group" style="margin-top: 20px;">
+			    <div class="mui-input-row">
+			        <label>编号：</label>
+			        <input id="number" type="text" class="mui-input-clear" placeholder="请输入编号">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>姓名：</label>
+			        <input id="name" type="text" class="mui-input-clear" placeholder="请输入姓名">
+			    </div>												
+																	
+			    <div class="mui-input-row">
+			        <label>账号：</label>
+			        <input id="account" type="text" class="mui-input-clear" placeholder="请输入用户名">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>密码：</label>
+			        <input id="password" type="password" class="mui-input-clear mui-input-password" placeholder="请输入密码">
+			    </div>
+			    <div class="mui-input-row">
+			        <label>库房：</label>
+			        <input id="storge" type="text" class="mui-input-clear" placeholder="请输入库房">
+			    </div>
+				<div class="mui-input-row mui-checkbox">
+				<label>收货权限</label>
+				<input name="shouhuo" id="shouhuo"  type="checkbox" >
+				</div>
+					
+				<div class="mui-input-row mui-checkbox">
+				<label>验货权限</label>
+				<input name="yanhuo" id="yanhuo"  type="checkbox" >
+				</div>
+
+				<div class="mui-input-row mui-checkbox">
+				<label>上架权限</label>
+				<input name="shangjia" id="shangjia" type="checkbox" >
+				</div>	
+																				
+				<div class="mui-input-row mui-checkbox">
+				<label>复核权限</label>
+				<input name="fuhe" id="fuhe"  type="checkbox" >
+				</div>																					
+			 </div>
+			<div class="mui-button-row" style="margin-top:20px">
+			        <button type="button" data-loading-text="登录中" class="mui-btn mui-btn-primary" style="width:40%;height: 40px;">注册账号</button>
+			        <!--<button type="button" class="mui-btn mui-btn-danger" >取消</button>-->									
+			</div>
+		
+		
+		</div>
+		<script type="text/javascript">
+			mui(document.body).on('tap', '.mui-btn', function(e) {
+			mui("#input_example input").each(function() {
+				//若当前input为空，则alert提醒 
+				if(!this.value || this.value.trim() == "") {
+				    var label = this.previousElementSibling;
+				    mui.alert(label.innerText + "不允许为空");
+				    check = false;
+				    return false;
+				}else{
+					check =true;
+				}
+			}); //校验通过，继续执行业务逻辑 
+				if(check){ 
+					mui('.mui-btn').button('loading');
+					var number = document.getElementById("number").value;
+					var name = document.getElementById("name").value;
+				    var myaccount=  document.getElementById("account").value;
+					var mypasswd = document.getElementById("password").value;
+					var storge = document.getElementById("storge").value;
+					var IP_PORT = localStorage.getItem("IP_PORT");
+					var shouhuo = document.getElementById('shouhuo').checked;
+					var yanhuo = document.getElementById('yanhuo').checked;
+					var shangjia = document.getElementById('shangjia').checked;
+					var fuhe = document.getElementById('fuhe').checked;
+					host = localStorage.getItem('host');					
+					var url = host + '/regist';					
+					// console.log("test1="+test1);
+					// console.log("test2="+test2);
+					// var url = 'http://'+ IP_PORT+'/'+'fengtian/Apisaomiao/zhuce';
+					// var url = 'http://cwc.vaiwan.com/regist';
+					console.log("url="+url);
+					if(shouhuo){
+						console.log("shouhuo="+shouhuo);
+						shouhuo='1';						
+					}else{
+						shouhuo='0';
+					}
+					if(yanhuo){
+						yanhuo='1';
+					}else{
+						yanhuo='0';
+					}
+					if(shangjia){
+						shangjia='1';
+					}else{
+						shangjia='0';
+					}
+					if(fuhe){
+						fuhe='1';
+					}else{
+						fuhe='0';
+					}
+					console.log("yanhuo="+yanhuo);
+					console.log("shangjia="+shangjia);
+					console.log("fuhe="+fuhe);
+					mui.ajax(url,{
+							data:{
+								account:myaccount,
+								password:mypasswd,
+								number:number,
+								name:name,
+								storge:storge,
+								flagone:shouhuo,
+								flagtwo:yanhuo,
+								flagthree:shangjia,
+								flagfour:fuhe,
+								powerflag:"0"
+							},
+							dataType:'jsonp',//服务器返回json格式数据
+							type:'get',//HTTP请求类型
+			
+							success:function(data){
+								console.log("data="+data);
+								//获得服务器响应
+								mui('.mui-btn').button('reset');
+								var res = JSON.parse(data);
+								// var test = JSON.stringify(data);
+								// console.log("test="+test.msg);
+								console.log("res="+res.code);
+								if(res.code == 200){
+									console.log(res.powerflag);
+									 mui.toast('注册成功！'); 
+									 console.log(res.powerflag);
+									 if(res.powerflag=='1'){
+										 var indexPage = plus.webview.getWebviewById('index_gly.html');
+										 mui.fire(indexPage, 'reload_data', {});
+										 mui.openWindow({
+										 	url: 'index_gly.html',
+										 	id: 'index_gly.html',
+										 
+										 });
+									 }
+								}else{
+									mui.toast(res.msg); 
+								}
+							}
+						});
+				}
+			});
+		</script>
+
+			
+
+</body>
+</html>
